@@ -37,10 +37,18 @@ class Table {
         constraint.binaryColumn ? constraint.binaryColumn : ""
       } ${constraint.unsigned ? constraint.unsigned : ""} ${
         constraint.defaultValue ? constraint.defaultValue : ""
+      } ${
+        constraint.isForeignKey.isUsed
+          ? this._addForeignKey(constraint.isForeignKey)
+          : ""
       }`.trim();
     });
 
     return columns;
+  }
+
+  _addForeignKey(fk) {
+    return `CONSTRAINT ${fk.foreignKeyName} FOREIGN KEY (${fk.tableColumn} REFERENCES ${fk.foreignKeyTableName} (${fk.foreignKeyColumnName}))`;
   }
 }
 
